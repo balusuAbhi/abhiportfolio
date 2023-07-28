@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+:root {
+  --nav-link: rgba(0, 0, 0, 0.55);
+  --nav-active: rgb(41, 40, 40);
+  --name-color: rgb(30, 48, 243);
+  --white-color: rgb(255, 255, 255);
+  --resume-btn: #1e30f3;
+  --resume-atv-btn: #0c1791;
+  --about-text : #6c757d;
+  --about-bg : rgb(248, 249, 250);
+  --contact-btn :#1e30f3;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: #877c84;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #e96936; 
+  border-radius: 4px;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+/* =============nav-bar==================== */
+nav.nav_conatiner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1% 10.5%;
+  border-bottom: 1px solid #eceaeb;
+}
+.option_conatiner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.option_conatiner li {
+  list-style-type: none;
+}
+.option_conatiner li > a {
+  text-decoration: none;
+  color: var(--nav-link);
+  font-weight: 700;
+  font-size: 18px;
+}
+.option_conatiner li > a:active {
+  color: var(--nav-active);
+}
+.name_container > h1 {
+  color: var(--name-color);
+  font-size: 25px;
+}

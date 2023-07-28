@@ -1,0 +1,201 @@
+<section class="contact-main-container">
+  <div class="loader-container">
+    <div class="loader-wrapper">
+      <svg
+        version="1.1"
+        id="L5"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 100 100"
+        enable-background="new 0 0 0 0"
+        xml:space="preserve"
+      >
+        <circle fill="#fff" stroke="none" cx="6" cy="50" r="6">
+          <animateTransform
+            attributeName="transform"
+            dur="1s"
+            type="translate"
+            values="0 15 ; 0 -15; 0 15"
+            repeatCount="indefinite"
+            begin="0.1"
+          />
+        </circle>
+        <circle fill="#fff" stroke="none" cx="30" cy="50" r="6">
+          <animateTransform
+            attributeName="transform"
+            dur="1s"
+            type="translate"
+            values="0 10 ; 0 -10; 0 10"
+            repeatCount="indefinite"
+            begin="0.2"
+          />
+        </circle>
+        <circle fill="#fff" stroke="none" cx="54" cy="50" r="6">
+          <animateTransform
+            attributeName="transform"
+            dur="1s"
+            type="translate"
+            values="0 5 ; 0 -5; 0 5"
+            repeatCount="indefinite"
+            begin="0.3"
+          />
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="thank-you-conatiner">
+    <div class="thank-wrapper">
+      <p>Form is Submitted</p>
+      <h2>Thank You</h2>
+      <button onclick="handlethankyou()">Ok</button>
+    </div>
+  </div>
+  <section class="contact-sec1-container">
+    <article class="contact-head-part">
+      <img src="../../assets/icons8-mail.svg" alt="mail-icon" />
+      <h2>Get in touch</h2>
+      <p>Lets work together</p>
+    </article>
+    <article class="contact-form-container">
+      <form id="contact-form" onsubmit="HandleSubmit(event)">
+        <div class="each-input">
+          <input
+            type="text"
+            placeholder="name"
+            class="input-field"
+            name="name"
+          />
+          <label class="input-label">Full name</label>
+          <p class="error-msg">A name is required</p>
+        </div>
+        <div class="each-input">
+          <input
+            type="text"
+            placeholder="Email address"
+            class="input-field"
+            name="email"
+          />
+          <label class="input-label">Email address</label>
+          <p class="error-msg">A valid email is required</p>
+        </div>
+        <div class="each-input">
+          <input
+            type="tel"
+            placeholder="Phone number"
+            class="input-field"
+            name="number"
+          />
+          <label class="input-label">Phone number</label>
+          <p class="error-msg">A valid phone number is required</p>
+        </div>
+        <div class="each-input">
+          <textarea
+            class="input-field input-textarea"
+            placeholder="Message"
+            type="text"
+            name="message"
+          ></textarea>
+          <label class="input-label">Message</label>
+          <p class="error-msg">A message is required</p>
+        </div>
+        <div class="each-input">
+          <button id="submit-btn" type="submit">Submit</button>
+        </div>
+      </form>
+    </article>
+  </section>
+</section>
+
+<script>
+  const submitBtn = document.getElementById("submit-btn");
+  const loader = document.querySelector(".loader-container");
+  const inputFields = [...document.querySelectorAll(".input-field")];
+  function HandleSubmit(e) {
+    e.preventDefault();
+    const forminputs = [
+      ...document.querySelectorAll(
+        "#contact-form input, #contact-form textarea"
+      ),
+    ];
+    const errormsgs = [...document.querySelectorAll(".error-msg")];
+    submitBtn.disabled = true;
+
+    let userData = {};
+    //calling function to validate inputs
+    const isvalid = validateInputFields(forminputs, userData);
+    if (isvalid.includes(false) && isvalid.length !== 0) {
+      isvalid.forEach((el, index) => {
+        if (!el) {
+          errormsgs[index].classList.add("error");
+          inputFields[index].classList.add("error");
+        } else {
+          errormsgs[index].classList.remove("error");
+          inputFields[index].classList.remove("error");
+        }
+      });
+      submitBtn.disabled = false;
+    } else {
+      document.body.style.overflow = "hidden";
+      loader.style.display = "flex";
+      submitBtn.disabled = false;
+      //removing error messages
+      errormsgs.forEach((el) => {
+        el.classList.remove("error");
+      });
+      inputFields.forEach((el) => {
+        el.classList.remove("error");
+      });
+      //api call
+      fetch("/sendData", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            document.body.style.removeProperty("overflow");
+            loader.style.display = "none";
+            document.querySelector('.thank-you-conatiner').style.transform = "scale(1)";
+            forminputs.forEach((el) => {
+              el.value = "";
+            });
+          } else {
+            alert("Bad request");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+  //function to validate inputs
+  function validateInputFields(forminputs, formData) {
+    return forminputs.map((el, index) => {
+      if (el.value !== "") {
+        if (el.name == "number") {
+          const regex = /^[6-9]{1}[0-9]{9}$/;
+          formData[el.name] = el.value;
+          return (value = regex.test(el.value));
+        } else if (el.name === "email") {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          formData[el.name] = el.value;
+          return emailRegex.test(el.value);
+        } else {
+          formData[el.name] = el.value;
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
+  }
+
+  //thankyou
+  function handlethankyou(){
+    document.querySelector('.thank-you-conatiner').style.transform = "scale(0)";
+  }
+</script>
