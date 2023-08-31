@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+require('dotenv').config()
 const expressLayouts = require("express-ejs-layouts");
-const PORT = 8000;
+const PORT = process.env.port || 8000;
 var bodyparser = require("body-parser");
+
 
 app.set("view engine", "ejs");
 
