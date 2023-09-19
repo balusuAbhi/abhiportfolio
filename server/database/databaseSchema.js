@@ -18,6 +18,6 @@ const customer = new mongoose.Schema({
         required: true,
     }
 })
-const Todomodel = mongoose.model('customers',customer);
+const Customermodel = mongoose.model('Customer',customer);
 
-module.exports = Todomodel;
+module.exports = Customermodel;

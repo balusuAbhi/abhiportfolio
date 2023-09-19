@@ -156,7 +156,7 @@
         body: JSON.stringify(userData),
       })
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status === 201) {
             document.body.style.removeProperty("overflow");
             loader.style.display = "none";
             document.querySelector('.thank-you-conatiner').style.transform = "scale(1)";

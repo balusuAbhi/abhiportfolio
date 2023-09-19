@@ -1,11 +1,4 @@
-// const Todomodel = require("./database/databaseSchema");
-const excel = require("exceljs");
-const path = require("path");
-const workbook = new excel.Workbook();
-const customerSheet = workbook.addWorksheet("customerData", {
-  properties: { tabColor: { argb: "FFC0000" } },
-});
-customerSheet.addRow(["name", "email", "number", "message"]);
+const Customermodel = require("./database/databaseSchema");
 
 exports.handleHome = async function (req, res) {
   res.render("pages/Home.ejs", {
@@ -23,22 +16,26 @@ exports.handleContact = async function (req, res) {
   });
 };
 
+exports.handleResume = async function (req, res) {
+  res.render("pages/Resume.ejs", {
+    title: "Resume Page",
+    layout: "layouts/Layout.ejs",
+    css: "../stylesheets/Resume.css",
+  });
+};
 exports.handleForm = async function (req, res) {
   if (Object.keys(req.body) !== 0) {
+    const { name, email, number, message } = req.body;
+    const customerData = {
+      name,
+      email,
+      number,
+      message,
+    };
+    const CustomerData = new Customermodel({ ...customerData });
     try {
-      const { name, email, number, message } = req.body;
-      customerSheet.addRow([name, email, number, message]);
-      const excelPath = path.join(__dirname, "customerData.xlsx");
-      workbook.xlsx
-        .writeFile(excelPath)
-        .then(() => {
-          setTimeout(()=>{
-            res.sendStatus(200);
-          },2000)
-        })
-        .catch(() => {
-          res.sendStatus(500);
-        });
+      const savedCustomer = await CustomerData.save();
+      res.sendStatus(201)
     } catch (err) {
       console.log(err);
     }

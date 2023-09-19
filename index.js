@@ -1,14 +1,11 @@
 const express = require("express");
 const app = express();
-require('dotenv').config()
+require("dotenv").config();
 const expressLayouts = require("express-ejs-layouts");
 const PORT = process.env.port || 8000;
 var bodyparser = require("body-parser");
 
-
 app.set("view engine", "ejs");
-
-// app.use(express.urlencoded({ extended: true })); // alternative for body-parser
 
 //body-parser middleware
 app.use(bodyparser.urlencoded({ extended: false }));
